@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人博客 · 主页</title>
+  <style>
+    /* 全局重置 & 字体 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: linear-gradient(145deg, #f9f7fe 0%, #eef1f9 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      color: #1f2937;
+    }
+
+    /* 主卡片容器 – 毛玻璃质感 + 柔和阴影 */
+    .blog-container {
+      max-width: 1100px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 3.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15),
+                  0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+      padding: 2.5rem 2rem;
+      transition: all 0.2s ease;
+    }
+
+    /* 头部区域：博客标题 */
+    .blog-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      gap: 1rem;
+    }
+
+    .blog-logo h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #3b3f5c, #5d5c8c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .blog-logo span {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #6b7280;
+      display: block;
+      margin-top: 0.15rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* 页面内容 */
+    .hero {
+      margin-bottom: 2rem;
+    }
+
+    .hero h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #1e1b2e;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: #4b5563;
+      max-width: 700px;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    /* 首页小提示 */
+    .home-note {
+      margin-top: 2.5rem;
+      color: #7d8fa8;
+      font-size: 0.95rem;
+      letter-spacing: 0.2px;
+    }
+
+    /* 底部 */
+    .blog-footer {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #9aaec2;
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+      padding-top: 1.8rem;
+      letter-spacing: 0.2px;
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 600px) {
+      .blog-container {
+        padding: 1.8rem 1.2rem;
+        border-radius: 2rem;
+      }
+      .hero h2 {
+        font-size: 1.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="blog-container">
+    <!-- 头部：博客名称 -->
+    <header class="blog-header">
+      <div class="blog-logo">
+        <h1>轻语博客 ✦</h1>
+        <span>记录灵感与思考</span>
+      </div>
+    </header>
+
+    <!-- 主页内容 -->
+    <section class="page-section">
+      <div class="hero">
+        <h2>欢迎来到我的数字花园</h2>
+        <p>这里记录我的学习笔记、生活感悟与创意碎片。希望你能在此找到共鸣或灵感。</p>
+      </div>
+
+      <p class="home-note">
+        ✨ 感谢你的来访，慢慢看，随便逛。
+      </p>
+    </section>
+
+    <!-- 底部 -->
+    <footer class="blog-footer">
+      <p>© 2025 轻语博客 · 用 ❤️ 与 HTML/CSS 构建</p>
+    </footer>
+  </div>
+</body>
+</html>
