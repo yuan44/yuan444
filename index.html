@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人博客 · 主页</title>
+  <style>
+    /* 全局重置 & 字体 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: linear-gradient(145deg, #f9f7fe 0%, #eef1f9 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      color: #1f2937;
+    }
+
+    /* 主卡片容器 – 毛玻璃质感 + 柔和阴影 */
+    .blog-container {
+      max-width: 1100px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 3.5rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15),
+                  0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+      padding: 2.5rem 2rem;
+      transition: all 0.2s ease;
+    }
+
+    /* 头部区域：博客标题 + 导航 */
+    .blog-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      gap: 1rem;
+    }
+
+    .blog-logo h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #3b3f5c, #5d5c8c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+    }
+
+    .blog-logo span {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #6b7280;
+      display: block;
+      margin-top: 0.15rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* 导航链接 */
+    .nav-links {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 3rem;
+      font-weight: 500;
+      font-size: 1rem;
+      color: #2d3e50;
+      background: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(255, 255, 255, 0.7);
+      transition: all 0.25s ease;
+      backdrop-filter: blur(4px);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .nav-links a::before {
+      content: "📄";
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+
+    .nav-links a[href="#home"]::before {
+      content: "🏠";
+    }
+
+    .nav-links a[href="#articles"]::before {
+      content: "📝";
+    }
+
+    .nav-links a[href="#about"]::before {
+      content: "👤";
+    }
+
+    .nav-links a:hover {
+      background: white;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08), 0 0 0 1px #cbd5e1;
+      transform: translateY(-2px);
+      color: #1e293b;
+    }
+
+    .nav-links a.active {
+      background: #ffffff;
+      box-shadow: 0 10px 20px -5px rgba(90, 70, 150, 0.2), 0 0 0 1.5px #a5b4fc;
+      color: #3b3f5c;
+      font-weight: 600;
+    }
+
+    /* 页面区块切换 */
+    .page-section {
+      display: none;
+      animation: fade 0.3s ease;
+    }
+
+    #home {
+      display: block;
+    }
+
+    .blog-container:has(.page-section:target) #home {
+      display: none;
+    }
+
+    #home:target {
+      display: block !important;
+    }
+
+    #articles,
+    #about {
+      display: none;
+    }
+
+    #articles:target,
+    #about:target {
+      display: block;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 各页面内容 */
+    .hero {
+      margin-bottom: 2rem;
+    }
+
+    .hero h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: #1e1b2e;
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      color: #4b5563;
+      max-width: 700px;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    /* 主页两个跳转按钮 */
+    .home-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .home-actions a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.05rem;
+      padding: 0.9rem 2rem;
+      border-radius: 3rem;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(4px);
+      color: #2d3e50;
+      box-shadow: 0 8px 18px -8px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.9);
+      transition: all 0.25s ease;
+    }
+
+    .home-actions a:hover {
+      background: white;
+      transform: translateY(-3px);
+      box-shadow: 0 15px 25px -8px rgba(0, 0, 0, 0.15), 0 0 0 1.5px #a5b4fc;
+      color: #1e1b2e;
+    }
+
+    .home-actions a:first-child {
+      background: linear-gradient(135deg, #ffffff, #f5f3ff);
+    }
+
+    .home-actions a:last-child {
+      background: linear-gradient(135deg, #ffffff, #f0f4fe);
+    }
+
+    /* ====== 文章页面：可记录自己的文章 ====== */
+    .post-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin: 2rem 0 1rem;
+    }
+
+    .post-item {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(4px);
+      border-radius: 1.8rem;
+      padding: 1.5rem 2rem;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(255, 255, 255, 0.7);
+      transition: all 0.2s ease;
+    }
+
+    .post-item:hover {
+      background: white;
+      box-shadow: 0 15px 25px -10px rgba(0, 0, 0, 0.1), 0 0 0 1px #cbd5e1;
+    }
+
+    .post-item h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 0.35rem;
+    }
+
+    .post-meta {
+      font-size: 0.85rem;
+      color: #8b9eb0;
+      margin-bottom: 0.7rem;
+    }
+
+    .post-item p {
+      color: #4a5e73;
+      line-height: 1.6;
+    }
+
+    /* ====== 关于我页面：可记录自己的信息 ====== */
+    .about-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      align-items: flex-start;
+      margin: 1.5rem 0;
+    }
+
+    .about-avatar {
+      flex-shrink: 0;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #9aa8c7, #b9c6e0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      color: white;
+      box-shadow: 0 15px 25px -8px rgba(60, 70, 120, 0.3);
+      border: 3px solid rgba(255, 255, 255, 0.7);
+    }
+
+    .about-text {
+      flex: 1;
+      min-width: 250px;
+    }
+
+    .about-text p {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #374151;
+      margin-bottom: 1.25rem;
+    }
+
+    .skill-badge {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+
+    .skill-badge span {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 0.5rem 1.2rem;
+      border-radius: 3rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #3b3f5c;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.02), 0 0 0 1px #e2e8f0;
+    }
+
+    /* 返回主页链接 */
+    .back-home {
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .back-home a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 0.7rem 1.8rem;
+      border-radius: 3rem;
+      color: #3d4e63;
+      font-weight: 500;
+      box-shadow: 0 5px 12px rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(255, 255, 255, 0.9);
+      transition: all 0.2s ease;
+    }
+
+    .back-home a:hover {
+      background: white;
+      box-shadow: 0 10px 18px -5px rgba(0, 0, 0, 0.08), 0 0 0 1px #b9c6e0;
+      transform: translateY(-2px);
+    }
+
+    /* 底部 */
+    .blog-footer {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #9aaec2;
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+      padding-top: 1.8rem;
+      letter-spacing: 0.2px;
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 600px) {
+      .blog-container {
+        padding: 1.8rem 1.2rem;
+        border-radius: 2rem;
+      }
+      .blog-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .nav-links {
+        width: 100%;
+      }
+      .nav-links a {
+        flex: 1 0 auto;
+        justify-content: center;
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+      }
+      .hero h2 {
+        font-size: 1.9rem;
+      }
+      .home-actions a {
+        flex: 1 0 auto;
+        justify-content: center;
+        padding: 0.8rem 1.2rem;
+        font-size: 0.95rem;
+      }
+      .about-avatar {
+        width: 90px;
+        height: 90px;
+        font-size: 2.5rem;
+      }
+      .post-item {
+        padding: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="blog-container">
+    <!-- 头部：博客名称 + 导航（主页、文章、关于我） -->
+    <header class="blog-header">
+      <div class="blog-logo">
+        <h1>我的密码周报</h1>
+        <span>成长记录</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#home" class="active">主页</a>
+        <a href="#articles">文章</a>
+        <a href="#about">关于我</a>
+      </nav>
+    </header>
+
+    <!-- ========= 主页 ========= -->
+    <section id="home" class="page-section">
+      <div class="hero">
+        <h2>你好</h2>
+        <p>祝你每天开心</p>
+      </div>
+
+      <p style="margin-top: 2.5rem; color: #7d8fa8; font-size: 0.95rem; letter-spacing: 0.2px;">
+        ✨ 点击上方按钮，进入不同页面
+      </p>
+    </section>
+
+    <!-- ========= 文章页面：在这里记录自己的文章 ========= -->
+    <section id="articles" class="page-section">
+      <div class="hero" style="margin-bottom: 1rem;">
+        <h2>📝 我的文章</h2>
+        <p></p>
+      </div>
+
+      <div class="post-list">
+        <!-- 文章1：替换标题、日期和正文即可 -->
+        
+        <article class="post-item">
+         <h3>RSA作业</h3>
+        <div class="post-meta"></div>
+       <p><strong>第一题：</strong></p >
+  <p>已知 \(c_1 \equiv (3p + 7q)^{e_1} \pmod N\)</p >
+  <p>\(c_2 \equiv (2p + 5q)^{e_2} \pmod N\)</p >
+  <p>将 \(c_1\) 乘 \(e_2\) 次方，将 \(c_2\) 乘 \(e_1\) 次方得：</p >
+  <p>\(C_1 = (c_1)^{e_2} \equiv (3p + 7q)^{e_1 e_2} \pmod N\)</p >
+  <p>\(C_2 = (c_2)^{e_1} \equiv (2p + 5q)^{e_1 e_2} \pmod N\)</p >
+  <p>为了消去 \(p\) 得：</p >
+  <p>\(2^{e_1 e_2} C_1 \equiv (6p)^{e_1 e_2} + (14q)^{e_1 e_2} \pmod N\)</p >
+  <p>\(3^{e_1 e_2} C_2 \equiv (6p)^{e_1 e_2} + (15q)^{e_1 e_2} \pmod N\)</p >
+  <p>两式相减：</p >
+  <p>\(S \equiv 2^{e_1 e_2} C_1 - 3^{e_1 e_2} C_2 \equiv (14^{e_1 e_2} - 15^{e_1 e_2})q^{e_1 e_2} \pmod N\)</p >
+  <p>就可以求出 \(q\) 了。</p >
+
+  <p><strong>第二题：</strong></p >
+  <p>我们可以把 \(P_{new}\) 和 \(Q_{new}\) 代入 gift 的公式中：</p >
+  <p>\(gift = 2024 \times (p + 2 \times noise + 1 + q - noise^2)\)</p >
+  <p>变一下形：</p >
+  <p>\(S = p + q = \frac{gift}{2024} - 2 \times noise - 1 + noise^2\)</p >
+  <p>因为 \(p+q\) 和 \(pq\) 都有了，所以构造方程：</p >
+  <p>\(p\) 和 \(q\) 是方程 \(X^2 - S \cdot X + n = 0\) 的两个根。</p >
+  <p>因为 \(pq\) 均为整数，所以判别式要为完全平方数：</p >
+  <p>\(f(x) = (\frac{gift}{2024} - 2x - 1 + x^2)^2 - 4n\)</p >
+  <p>寻找一个较小且可爱的 \(x\) 适配吧。</p >
+
+  <p><strong>第三题：</strong></p >
+  <p>本来以为这道是简单的，结果发现 \(\phi\) 是高位没给全，暂时还没解出来。</p >
+
+  <p><strong>第四题：</strong></p >
+  <p>题目中很明显，\(p, q\) 相近，学长上课有讲用费马分解。</p >
+  <p>令 \(p=a-b, q=a+b\)</p >
+  <p>\(N = p \times q = (a - b)(a + b) = a^2 - b^2\) 移项得到：\(a^2 - N = b^2\)</p >
+  <p>开根，依次尝试，就可以得出 \(a, b, p, q\) 了。</p >
+</article>
+
+<!-- 文章2 -->
+<article class="post-item">
+  <h3>线性代数</h3>
+  <div class="post-meta"></div>
+  <p>矩阵:</p >
+  <p>行列数相等为同型矩阵，若对应元素也相等则为相等矩阵。</p >
+  <p>所以两个零矩阵也不一定相等。</p >
+  <p>分类：零矩阵、对角矩阵、单位矩阵、上三角、下三角 </p >
+  <p>加减法同型直接算即可。</p >
+  <p>两个矩阵相乘的前提左矩阵的行数等于右矩阵的列数，且不满足交换律、消去律。</p >
+  <p>两个同阶对角形矩阵可交换。</p >
+  <p>eg: \(A=\begin{pmatrix} 1 & 0 \\ 2 & 1 \end{pmatrix}\) 则 \(A^n\) 可以通过 \(A \cdot A \cdots A\) 多次相乘得出规律即 \(A=\begin{pmatrix} 1 & 0 \\ 2(n+1) & 1 \end{pmatrix}\) 则</p >
+  <p>eg: \(A=\begin{pmatrix} 1 \\ -1 \\ 2 \end{pmatrix}\), \(B=\begin{pmatrix} 3 & 1 & -2 \end{pmatrix}\), 则 \((AB)^n\)</p >
+  <p>\(AB=\begin{pmatrix} 3 & 1 & -2 \\ -3 & -1 & 2 \\ 6 & 2 & -4 \end{pmatrix}\) 而 \(BA=-2\)</p >
+  <p>所以 \((AB)^n\) 可以看作 \((AB) \times (BA)^{n-1}\)</p >
+</article>
+
+<!-- 文章3：碎碎叨叨-->
+<article class="post-item">
+  <h3>初等数论</h3>
+  <div class="post-meta"></div>
+  <p>二次剩余：如果存在一个整数 \(x\)，使得 \(x^2 \equiv a \pmod n\) 成立，那么 \(a\) 就是模 \(n\) 的平方剩余；反之则是非平方剩余。</p >
+  <p>欧拉判别法：\(a^{(p-1)/2} \pmod p\)</p >
+  <p>结果是 1 即平方剩余，-1 即非平方剩余。</p >
+  <p>勒让德符号：</p >
+  <p>
+  \[
+  \left(\frac{a}{p}\right) = 
+  \begin{cases} 
+  1 & \text{如果 } a \text{ 是模 } p \text{ 的平方剩余（能开方）} \\
+ -1 & \text{如果 } a \text{ 是模 } p \text{ 的非平方剩余（不能开方）} \\
+  0 & \text{如果 } a \equiv 0 \pmod p \text{（即 } a \text{ 是 } p \text{ 的倍数）}
+  \end{cases} 
+  \]
+  </p >
+</article>
+      </div>
+
+      <div class="back-home">
+        <a href="#home">← 返回主页</a>
+      </div>
+    </section>
+
+    <!-- ========= 关于我页面：在这里记录自己的信息 ========= -->
+    <section id="about" class="page-section">
+      <div class="hero" style="margin-bottom: 1rem;">
+        <h2>👤 关于我</h2>
+        <p></p>
+      </div>
+
+      <div class="about-content">
+        <!-- 头像：把 🧑‍💻 换成你自己的 emoji 或文字 -->
+        <div class="about-avatar">🧑‍💻</div>
+        <div class="about-text">
+          <!-- 替换成你自己的介绍 -->
+          <p>你好</p>
+          <p></p>         
+               </div>
+        </div>
+      </div>
+
+      <div class="back-home">
+        <a href="#home">← 返回主页</a>
+      </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer class="blog-footer">
+      <p>© 2026</p>
+    </footer>
+  </div>
+
+  <!-- 脚本：高亮当前导航项 -->
+  <script>
+    (function() {
+      const navLinks = document.querySelectorAll('.nav-links a');
+      const validHashes = ['#home', '#articles', '#about'];
+
+      function updateActiveNav() {
+        let hash = window.location.hash || '#home';
+        if (!validHashes.includes(hash)) {
+          hash = '#home';
+        }
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === hash) {
+            link.classList.add('active');
+          }
+        });
+      }
+
+      window.addEventListener('hashchange', updateActiveNav);
+      window.addEventListener('load', updateActiveNav);
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          setTimeout(updateActiveNav, 10);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
